@@ -3,6 +3,8 @@
 My personal Claude Code setup: the same routing rules, commands and helpers on every machine and in cloud sessions.
 Project-specific agents and skills stay in each project's `.claude/` (e.g. `cdp2-frontend/.claude/`).
 
+**How to use it:** [English](docs/USAGE.md) · [Українською](docs/USAGE.uk.md)
+
 ## What's inside
 
 | Path | What it does | Lands in |
@@ -12,6 +14,7 @@ Project-specific agents and skills stay in each project's `.claude/` (e.g. `cdp2
 | `commands/pickup.md` | `/pickup CDP-123`: Linear → branch → implement → local gate → commit msg + PR text + Linear update (sent only on yes) | `~/.claude/commands/` |
 | `bin/wt` | `wt CDP-123 [slug]`: worktree + deps + Claude with Remote Control, running `/pickup` | `PATH` |
 | `bin/wt-clean` | Remove merged, clean worktrees (`--yes` to really do it) | `PATH` |
+| `bin/toolkit-sync` | `toolkit-sync "msg"`: commit + push toolkit changes (the one repo Claude may commit to) | `PATH` |
 | `bin/claude-hook-enable` | Enable the commit-msg hook in the current repo | `PATH` |
 | `hooks/commit-msg` | Strips `Co-Authored-By: Claude`, `Claude-Session:`, "Generated with Claude Code" | per repo |
 | `shell/aliases.sh` | `crc` = `claude --remote-control`, `crcb` = the same, named after the folder and branch | `~/.zshrc` |

@@ -25,6 +25,15 @@ Prefer a project command when one exists for the job (`/ticket`, `/commit-msg`, 
 - If the project forbids Claude from committing, hand over a paste-ready message instead. Otherwise still ask before `git commit` / `git push`.
 - Message: imperative subject under ~70 chars, blank line, short body on the why, ticket id on its own last line when known.
 
+## Changing the Claude setup itself
+
+When I ask to change how Claude works (a rule, command, agent, skill, hook), first decide where it belongs:
+
+- **Only one project** (its code, rules, Sentry/Slack, design system) → that project's `.claude/` or `CLAUDE.md`. It ships with the project's normal work; the project's git rules apply (in cdp2-frontend: never commit, hand over a message).
+- **Any project** → `~/code/claude-toolkit/` (`CLAUDE.md`, `commands/`, `bin/`, `hooks/`, `docs/`). Edit there, add a line to `CHANGELOG.md`, update `docs/USAGE.md` **and** `docs/USAGE.uk.md` if usage changed, then commit and push with `~/code/claude-toolkit/bin/toolkit-sync "<message>"`, no need to ask. If a new file was added under `commands/`, also run `~/code/claude-toolkit/install.sh`.
+
+Never mix the two: a toolkit commit contains toolkit files only. If a request needs both, do both parts and say which went where.
+
 ## Hand-over
 
 End every piece of work with: what changed (file, one line each) · what was verified and how · what was NOT verified · the commit message.

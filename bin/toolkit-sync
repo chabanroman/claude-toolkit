@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# toolkit-sync "message" — commit every change in claude-toolkit and push it.
+# The one place Claude may commit: this repo holds only my Claude setup, never project code.
+# (A project's own commit guard still covers that project; this script refuses to run anywhere else.)
+set -euo pipefail
+
+msg="${1:?usage: toolkit-sync \"commit message\"}"
+cd "$(dirname "$0")/.."
+
+if [ "$(basename "$(git rev-parse --show-toplevel)")" != "claude-toolkit" ]; then
+  echo "toolkit-sync only commits in claude-toolkit" >&2
+  exit 1
+fi
+
+git pull --rebase --autostash --quiet
+git add -A
+if git diff --cached --quiet; then
+  echo "nothing to commit"
+  exit 0
+fi
+git commit --quiet -m "$msg"
+git push --quiet
+git log -1 --format='pushed %h %s'
