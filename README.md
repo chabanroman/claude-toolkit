@@ -22,7 +22,7 @@ Why not a plugin: plugins don't load in cloud sessions (claude.ai/code, the phon
 ## Install on a new machine (macOS / Linux)
 
 ```bash
-git clone git@github.com:<you>/claude-toolkit.git ~/code/claude-toolkit
+git clone git@github.com:chabanroman/claude-toolkit.git ~/code/claude-toolkit
 ~/code/claude-toolkit/install.sh
 source ~/.zshrc
 ```
@@ -34,7 +34,7 @@ Needs `jq` and `git`. Re-running is safe. Anything it replaces goes to `~/.claud
 
 claude.ai → Code → environment settings → **Setup script**:
 ```bash
-git clone --depth 1 https://github.com/<you>/claude-toolkit.git ~/code/claude-toolkit && ~/code/claude-toolkit/install.sh --cloud
+git clone --depth 1 https://github.com/chabanroman/claude-toolkit.git ~/code/claude-toolkit && ~/code/claude-toolkit/install.sh --cloud
 ```
 For that the repo must be cloneable without auth (it holds no secrets, so it can be public). A private repo needs a token in the environment, which I'd rather avoid.
 The project's `.claude/` (agents, skills, project commands, hooks) comes with the repo clone by itself.
