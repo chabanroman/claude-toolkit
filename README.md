@@ -12,6 +12,8 @@ Project-specific agents and skills stay in each project's `.claude/` (e.g. `cdp2
 | `CLAUDE.md` | Routing table (inline / agent / parallel / sub-tickets), git and hand-over rules | `~/.claude/CLAUDE.md` |
 | `commands/task.md` | `/task <request>`: classify the request, say the decision in 2–3 lines, then do it | `~/.claude/commands/` |
 | `commands/pickup.md` | `/pickup CDP-123`: Linear → branch → implement → local gate → commit msg + PR text + Linear update (sent only on yes) | `~/.claude/commands/` |
+| `agents/` | Generic agents: `neckbeard` (how does X work, cited), `sidequest` (side fix), `rules-review` (diff vs project rules), `browser-verify` (localhost check), `sentry-fix`, `slack-scout`. A project agent with the same name overrides one of these | `~/.claude/agents/` |
+| `commands/sentry-sweep.md`, `commands/slack-scan.md` | `/sentry-sweep [24h]`, `/slack-scan [today]` | `~/.claude/commands/` |
 | `bin/wt` | `wt CDP-123 [slug]`: worktree + deps + Claude with Remote Control, running `/pickup` | `PATH` |
 | `bin/wt-clean` | Remove merged, clean worktrees (`--yes` to really do it) | `PATH` |
 | `bin/toolkit-sync` | `toolkit-sync "msg"`: commit + push toolkit changes (the one repo Claude may commit to) | `PATH` |
@@ -31,7 +33,7 @@ source ~/.zshrc
 ```
 Needs `jq` and `git`. Re-running is safe. Anything it replaces goes to `~/.claude/backup-<date>/` first.
 
-**Update:** `cd ~/code/claude-toolkit && git pull` (re-run `install.sh` only when a new command file is added).
+**Update:** `cd ~/code/claude-toolkit && git pull` (re-run `install.sh` only when a new command or agent file is added).
 
 ## Cloud sessions (phone / claude.ai/code)
 

@@ -10,7 +10,7 @@ claude_dir="$HOME/.claude"
 backup="$claude_dir/backup-$(date +%Y%m%d-%H%M%S)"
 cloud="${1:-}"
 
-mkdir -p "$claude_dir/commands"
+mkdir -p "$claude_dir/commands" "$claude_dir/agents"
 
 # Back up a real file before replacing it with a symlink; leave our own symlinks alone.
 link() {
@@ -30,6 +30,10 @@ link() {
 link "$toolkit/CLAUDE.md" "$claude_dir/CLAUDE.md"
 for f in "$toolkit"/commands/*.md; do
   link "$f" "$claude_dir/commands/$(basename "$f")"
+done
+# A project's own agent with the same name wins over these, so a project can keep a more specific version.
+for f in "$toolkit"/agents/*.md; do
+  link "$f" "$claude_dir/agents/$(basename "$f")"
 done
 
 # Commits and PRs carry no Claude attribution.

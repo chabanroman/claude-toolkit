@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.0 — 2026-10-27
+- Generic agents, adapted from cdp2-frontend: `neckbeard`, `sidequest`, `rules-review`, `browser-verify`, `sentry-fix`, `slack-scout`. They read the project's CLAUDE.md for its rules; a project agent with the same name overrides them.
+- `/sentry-sweep` and `/slack-scan` commands for any project.
+- `install.sh` links `agents/` into `~/.claude/agents/`.
+
 ## 0.2.0 — 2026-10-27
 - `toolkit-sync`: Claude commits and pushes toolkit-only changes itself.
 - `CLAUDE.md`: rule for where a setup change goes (project `.claude/` vs toolkit).
