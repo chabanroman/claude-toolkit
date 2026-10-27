@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# Install the commit-msg hook (strips Claude attribution) into the current repo.
+# Respects core.hooksPath and husky; an existing commit-msg hook is kept as commit-msg.local and still runs.
+set -euo pipefail
+
+toolkit="$(cd "$(dirname "$0")/.." && pwd)"
+repo="$(git rev-parse --show-toplevel)"
+
+hooks_dir="$(git config --get core.hooksPath || true)"
+if [ -z "$hooks_dir" ]; then
+  hooks_dir="$(git rev-parse --git-path hooks)"
+fi
+case "$hooks_dir" in
+  /*) ;;
+  *) hooks_dir="$repo/$hooks_dir" ;;
+esac
+
+# husky v9 points core.hooksPath at .husky/_ (generated); user hooks live in .husky/.
+if [ "$(basename "$hooks_dir")" = "_" ] && [ -d "$repo/.husky" ]; then
+  hooks_dir="$repo/.husky"
+fi
+
+mkdir -p "$hooks_dir"
+target="$hooks_dir/commit-msg"
+
+if [ -L "$target" ] && [ "$(readlink "$target")" = "$toolkit/hooks/commit-msg" ]; then
+  echo "Already enabled: $target"
+  exit 0
+fi
+
+if [ -e "$target" ]; then
+  mv "$target" "$hooks_dir/commit-msg.local"
+  echo "Kept the existing hook as $hooks_dir/commit-msg.local (it still runs after this one)."
+fi
+
+ln -s "$toolkit/hooks/commit-msg" "$target"
+echo "Enabled: $target -> $toolkit/hooks/commit-msg"
