@@ -19,7 +19,8 @@ You don't get: local `.env` files, Chrome or `browser-verify`, `localhost`, or R
 
 1. One-time setup at claude.ai/code → environment → setup script (README → Cloud sessions). Add the env vars the build needs (`VITE_*`); no secrets there.
 2. Phone: Claude app → **Code** → New session → pick the repo and branch.
-3. Ask: `/pickup CDP-123` or `/sentry-sweep`. The repo's commit guard still applies in the cloud: you get the diff and the commit message, and you commit from the session's "create branch / PR" button or from the laptop.
+3. Ask: `/pickup CDP-123` or `/sentry-sweep`. In the cloud Claude commits and pushes to a branch of its own (never `main` / `dev`): the VM is thrown away afterwards. You review the **Changes** card and open the PR from claude.ai or the GitHub app, then merge it yourself.
+4. To continue that work on the laptop: `claude --teleport` in the repo (picks the session, checks out its branch).
 
 ## Which one?
 

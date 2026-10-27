@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.4.0 — 2026-10-27
+- Cloud sessions: `/pickup`, `/sentry-sweep`, `/slack-scan` and the git rule in `CLAUDE.md` commit and push to Claude's own branch when `CLAUDE_CODE_REMOTE=true` (the VM is thrown away); locally nothing changes.
+
 ## 0.3.0 — 2026-10-27
 - Generic agents, adapted from cdp2-frontend: `neckbeard`, `sidequest`, `rules-review`, `browser-verify`, `sentry-fix`, `slack-scout`. They read the project's CLAUDE.md for its rules; a project agent with the same name overrides them.
 - `/sentry-sweep` and `/slack-scan` commands for any project.
