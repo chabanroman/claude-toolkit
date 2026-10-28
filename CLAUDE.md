@@ -24,7 +24,7 @@ Prefer a project command when one exists for the job (`/ticket`, `/commit-msg`, 
 
 - Commits are authored by me only: no `Co-Authored-By: Claude`, no "Generated with Claude Code".
 - If the project forbids Claude from committing, hand over a paste-ready message instead. Otherwise still ask before `git commit` / `git push`.
-- In a cloud session (`CLAUDE_CODE_REMOTE=true`) the VM is thrown away: when the work is done, commit on a branch of your own and push it (never to main / dev / master, no force push), then give me the PR link or the branch name.
+- In a cloud session (`CLAUDE_CODE_REMOTE=true`) the VM is thrown away: when the work is done, commit and push it (never to main / dev / master, no force push), then give me the PR link or the branch name. Name the branch after the work, not after the tool: `git checkout -b <ticket-id>-<slug>` (e.g. `CDP-2792-limit-description-length`), or `fix-<slug>` without a ticket — never a `claude/` prefix. If the push to that name is refused, push the session's own branch instead and tell me its name, so nothing is lost.
 - Message: imperative subject under ~70 chars, blank line, short body on the why, ticket id on its own last line when known.
 
 ## Changing the Claude setup itself

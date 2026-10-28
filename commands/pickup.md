@@ -11,7 +11,7 @@ Take this ticket: $ARGUMENTS
 4. **Implement.** If this project has a `/ticket` command, follow its steps from "pin the scope" on: it carries the project's rules. Otherwise route the work by the table in `~/.claude/CLAUDE.md`.
 5. **Local gate.** There is no CI, so this is the only check. Run whatever the project has, in this order, and don't skip any that exist: lint, typecheck, tests, build (read `package.json` scripts). Fix failures. Report each one as passed / failed / not present.
 6. **Hand over. Don't send anything yet:**
-   - the commit message. Locally, the project's rules decide whether you commit (if it forbids it, don't). In a cloud session (`CLAUDE_CODE_REMOTE=true`) commit on the ticket branch and push it, so the work isn't lost with the VM; never to main / dev
+   - the commit message. Locally, the project's rules decide whether you commit (if it forbids it, don't). In a cloud session (`CLAUDE_CODE_REMOTE=true`) commit on a branch named `<ticket-id>-<slug>` (never a `claude/` prefix; if that push is refused, push the session's own branch and say so) and push it, so the work isn't lost with the VM; never to main / dev
    - a PR title + body: summary, acceptance criteria as a checked list, how it was verified, the ticket link
    - a 3–5 line Linear comment summarizing the change
 7. **Ask once:** "Post the Linear comment and move the issue to In Review?" Do it only on yes. The PR is opened by me, or with `gh pr create` if I say so and `gh` is authenticated.

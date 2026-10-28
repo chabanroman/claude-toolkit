@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.1 — 2026-10-28
+- Cloud branches are named after the work (`<ticket-id>-<slug>`, `fix-sentry-<slug>`, `fix-slack-<slug>`), never `claude/…`; if that push is refused, push the session's own branch and say so.
+- `install.sh`: attribution also sets `sessionUrl: false`.
+
 ## 0.4.0 — 2026-10-27
 - Cloud sessions: `/pickup`, `/sentry-sweep`, `/slack-scan` and the git rule in `CLAUDE.md` commit and push to Claude's own branch when `CLAUDE_CODE_REMOTE=true` (the VM is thrown away); locally nothing changes.
 

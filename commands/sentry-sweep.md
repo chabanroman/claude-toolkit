@@ -8,4 +8,4 @@ Run the `sentry-fix` agent with: $ARGUMENTS (empty = unresolved issues seen in t
 When it returns:
 1. Show its report as it is.
 2. If a fix touches UI, run `browser-verify` on the affected pages. Run `rules-review` on the diff and fix what it finds.
-3. Finish with the files changed and the commit message. Never change anything in Sentry. In a cloud session (`CLAUDE_CODE_REMOTE=true`) instead commit on a branch of your own and push it, so the work isn't lost with the VM (never to main / dev); locally, never commit.
+3. Finish with the files changed and the commit message. Never change anything in Sentry. In a cloud session (`CLAUDE_CODE_REMOTE=true`) instead commit on a branch named `fix-sentry-<slug>` (never a `claude/` prefix; if that push is refused, push the session's own branch and say so) and push it, so the work isn't lost with the VM (never to main / dev); locally, never commit.

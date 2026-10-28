@@ -39,11 +39,11 @@ done
 # Commits and PRs carry no Claude attribution.
 settings="$claude_dir/settings.json"
 [ -f "$settings" ] || echo '{}' > "$settings"
-if [ "$(jq -c '.attribution // null' "$settings")" != '{"commit":"","pr":""}' ]; then
+if [ "$(jq -c '.attribution // null' "$settings")" != '{"commit":"","pr":"","sessionUrl":false}' ]; then
   mkdir -p "$backup"
   cp "$settings" "$backup/settings.json"
   tmp="$(mktemp)"
-  jq '.attribution = {"commit": "", "pr": ""}' "$settings" > "$tmp" && mv "$tmp" "$settings"
+  jq '.attribution = {"commit": "", "pr": "", "sessionUrl": false}' "$settings" > "$tmp" && mv "$tmp" "$settings"
   echo "set attribution off in $settings"
 fi
 
