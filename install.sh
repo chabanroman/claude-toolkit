@@ -10,7 +10,7 @@ claude_dir="$HOME/.claude"
 backup="$claude_dir/backup-$(date +%Y%m%d-%H%M%S)"
 cloud="${1:-}"
 
-mkdir -p "$claude_dir/commands" "$claude_dir/agents"
+mkdir -p "$claude_dir/commands" "$claude_dir/agents" "$claude_dir/skills"
 
 # Back up a real file before replacing it with a symlink; leave our own symlinks alone.
 link() {
@@ -35,6 +35,15 @@ done
 for f in "$toolkit"/agents/*.md; do
   link "$f" "$claude_dir/agents/$(basename "$f")"
 done
+# Skills are directories (skills/<name>/SKILL.md + files). Same override rule: a project skill with the same name wins.
+for d in "$toolkit"/skills/*/; do
+  [ -d "$d" ] || continue
+  d="${d%/}"
+  link "$d" "$claude_dir/skills/$(basename "$d")"
+done
+
+# Machine-readable version of what's installed.
+cp "$toolkit/VERSION" "$claude_dir/toolkit-version"
 
 # Commits and PRs carry no Claude attribution.
 settings="$claude_dir/settings.json"

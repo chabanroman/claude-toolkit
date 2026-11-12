@@ -12,7 +12,7 @@ Installed by `claude-toolkit` as `~/.claude/CLAUDE.md`. A project's own CLAUDE.m
 | Bug unrelated to the current feature | `sidequest` agent, keep this context clean. |
 | Diff is done | `rules-review` agent before writing a commit message. |
 | UI or data-flow change | `browser-verify` agent on localhost, don't stop at "it compiles". |
-| Ticket id (`ABC-123`) or Linear URL mentioned | Read it via Linear first (issue + comments + images). |
+| Ticket id (`ABC-123`) or Linear URL mentioned | Read it via Linear first (issue + comments + images), through the project's Linear binding (below). |
 | Sentry issue / error / stack trace mentioned | Read it via Sentry first; for a sweep, `/sentry-sweep` (`sentry-fix` agent). |
 | "What's broken according to Slack" | `/slack-scan <period>` (`slack-scout` agent, read-only; asks before fixing). |
 | Library API you're unsure of | Context7 docs for the installed version, not memory. |
@@ -22,17 +22,40 @@ Prefer a project command when one exists for the job (`/ticket`, `/commit-msg`, 
 
 ## Git
 
-- Commits are authored by me only: no `Co-Authored-By: Claude`, no "Generated with Claude Code".
-- If the project forbids Claude from committing, hand over a paste-ready message instead. Otherwise still ask before `git commit` / `git push`.
-- In a cloud session (`CLAUDE_CODE_REMOTE=true`) the VM is thrown away: when the work is done, commit and push it (never to main / dev / master, no force push), then give me the PR link or the branch name. Name the branch after the work, not after the tool: `git checkout -b <ticket-id>-<slug>` (e.g. `CDP-2792-limit-description-length`), or `fix-<slug>` without a ticket — never a `claude/` prefix. If the push to that name is refused, push the session's own branch instead and tell me its name, so nothing is lost.
+A project declares its policy in its own `CLAUDE.md` with a line `Git policy: <name>`. Nothing declared → `ask`.
+
+| Policy | Commit | Push | PR |
+|---|---|---|---|
+| `hand-over` | never locally — give a paste-ready message (cloud: see below) | never locally (cloud: see below) | give the PR text |
+| `ask` (**default**) | ask first (cloud: no ask, see below) | ask first (cloud: no ask) | give the PR text |
+| `autonomous` | after the local gate passes, without asking | to the work branch, without asking | `gh pr create` if `gh` is authenticated, else give the text |
+
+Whatever the policy:
+- Never commit or push to `main` / `master` / `dev` / `develop` directly. Never force-push.
+- Name the branch after the work: `<ticket-id>-<slug>` or `fix-<slug>` without a ticket — never a `claude/` prefix.
+- In a cloud session (`CLAUDE_CODE_REMOTE=true`) the VM is thrown away, so `hand-over` and `ask` commit and push to the work branch when the work is done, then give me the PR link or the branch name. If the push to that name is refused, push the session's own branch instead and tell me its name, so nothing is lost. `autonomous` is unchanged.
 - Message: imperative subject under ~70 chars, blank line, short body on the why, ticket id on its own last line when known.
+
+## No AI mention
+
+Commit messages, PR titles and bodies, branch names, code comments, changelogs and Linear comments read as written by me. Never put "Claude", "AI-generated", `Co-Authored-By`, "Generated with …", a robot emoji or a session link there. (The `commit-msg` hook is a safety net, not the rule.)
+
+## Linear binding
+
+A project may bind Linear in its own `CLAUDE.md`:
+```
+Linear: workspace <name> · teams <KEY,…> · server <mcp-server-name>
+```
+- If declared: use only that MCP server for Linear in this project. Before any write (comment, status, new issue), check that the workspace and the team match; if they don't, stop and say what you see.
+- A ticket id whose prefix is not in the declared teams is not this project's ticket: say so instead of reading it.
+- Nothing declared: use the claude.ai Linear connector.
 
 ## Changing the Claude setup itself
 
 When I ask to change how Claude works (a rule, command, agent, skill, hook), first decide where it belongs:
 
-- **Only one project** (its code, rules, Sentry/Slack, design system) → that project's `.claude/` or `CLAUDE.md`. It ships with the project's normal work; the project's git rules apply (in cdp2-frontend: never commit, hand over a message).
-- **Any project** → `~/code/claude-toolkit/` (`CLAUDE.md`, `agents/`, `commands/`, `bin/`, `hooks/`, `docs/`). Edit there, add a line to `CHANGELOG.md`, update `docs/USAGE.md` **and** `docs/USAGE.uk.md` if usage changed, then commit and push with `~/code/claude-toolkit/bin/toolkit-sync "<message>"`, no need to ask. If a new file was added under `commands/` or `agents/`, also run `~/code/claude-toolkit/install.sh`.
+- **Only one project** (its code, rules, Sentry/Slack, design system) → that project's `.claude/` or `CLAUDE.md`. It ships with the project's normal work; the project's Git policy applies.
+- **Any project** → `~/code/claude-toolkit/` (`CLAUDE.md`, `agents/`, `commands/`, `skills/`, `bin/`, `hooks/`, `docs/`). Edit there, add a line to `CHANGELOG.md` (on a release also bump `VERSION`), update `docs/USAGE.md` **and** `docs/USAGE.uk.md` if usage changed, then commit and push with `~/code/claude-toolkit/bin/toolkit-sync "<message>"`, no need to ask. If a new file was added under `commands/`, `agents/` or `skills/`, also run `~/code/claude-toolkit/install.sh`.
 
 Never mix the two: a toolkit commit contains toolkit files only. If a request needs both, do both parts and say which went where.
 

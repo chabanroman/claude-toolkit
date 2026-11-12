@@ -9,16 +9,19 @@ Project-specific agents and skills stay in each project's `.claude/` (e.g. `cdp2
 
 | Path | What it does | Lands in |
 |---|---|---|
-| `CLAUDE.md` | Routing table (inline / agent / parallel / sub-tickets), git and hand-over rules | `~/.claude/CLAUDE.md` |
+| `CLAUDE.md` | Routing table (inline / agent / parallel / sub-tickets), Git policies, no-AI-mention rule, Linear binding, hand-over | `~/.claude/CLAUDE.md` |
 | `commands/task.md` | `/task <request>`: classify the request, say the decision in 2–3 lines, then do it | `~/.claude/commands/` |
 | `commands/pickup.md` | `/pickup CDP-123`: Linear → branch → implement → local gate → commit msg + PR text + Linear update (sent only on yes) | `~/.claude/commands/` |
 | `agents/` | Generic agents: `neckbeard` (how does X work, cited), `sidequest` (side fix), `rules-review` (diff vs project rules), `browser-verify` (localhost check), `sentry-fix`, `slack-scout`. A project agent with the same name overrides one of these | `~/.claude/agents/` |
 | `commands/sentry-sweep.md`, `commands/slack-scan.md` | `/sentry-sweep [24h]`, `/slack-scan [today]` | `~/.claude/commands/` |
+| `commands/project-init.md` | `/project-init`: create or complete the repo's CLAUDE.md (checks, Git policy, Linear binding, rules), enable the hook | `~/.claude/commands/` |
+| `skills/` | Generic skills, one folder each (`skills/<name>/SKILL.md`). A project skill with the same name overrides one of these | `~/.claude/skills/` |
+| `VERSION` | Installed version, written to `~/.claude/toolkit-version` by `install.sh`. Bumped with `CHANGELOG.md` on every release | `~/.claude/toolkit-version` |
 | `bin/wt` | `wt CDP-123 [slug]`: worktree + deps + Claude with Remote Control, running `/pickup` | `PATH` |
 | `bin/wt-clean` | Remove merged, clean worktrees (`--yes` to really do it) | `PATH` |
 | `bin/toolkit-sync` | `toolkit-sync "msg"`: commit + push toolkit changes (the one repo Claude may commit to) | `PATH` |
 | `bin/claude-hook-enable` | Enable the commit-msg hook in the current repo | `PATH` |
-| `hooks/commit-msg` | Strips `Co-Authored-By: Claude`, `Claude-Session:`, "Generated with Claude Code" | per repo |
+| `hooks/commit-msg` | Safety net: strips `Co-Authored-By: Claude`, `Claude-Session:`, "Generated with Claude Code", 🤖 lines | per repo |
 | `shell/aliases.sh` | `crc` = `claude --remote-control`, `crcb` = the same, named after the folder and branch | `~/.zshrc` |
 | `install.sh` | Symlinks all of the above, sets `attribution` off, adds Context7 MCP | – |
 
@@ -33,7 +36,7 @@ source ~/.zshrc
 ```
 Needs `jq` and `git`. Re-running is safe. Anything it replaces goes to `~/.claude/backup-<date>/` first.
 
-**Update:** `cd ~/code/claude-toolkit && git pull` (re-run `install.sh` only when a new command or agent file is added).
+**Update:** `cd ~/code/claude-toolkit && git pull` (re-run `install.sh` only when a new command, agent or skill is added).
 
 ## Cloud sessions (phone / claude.ai/code)
 

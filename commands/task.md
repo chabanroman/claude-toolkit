@@ -5,7 +5,7 @@ argument-hint: <what you want done>
 
 Request: $ARGUMENTS
 
-1. **Gather what the request points at first.** A ticket id or Linear URL → read the issue, its comments and images. A Sentry link or error → read the issue and latest event. A Figma link → read the frame.
+1. **Gather what the request points at first.** A ticket id or Linear URL → read the issue, its comments and images, through the project's Linear binding (`~/.claude/CLAUDE.md`); a prefix outside the bound teams is not this project's ticket — say so. A Sentry link or error → read the issue and latest event. A Figma link → read the frame.
 
 2. **Classify, using the routing table in `~/.claude/CLAUDE.md` and the agents, skills and commands this project has.** Pick exactly one:
    - **inline**: small, one concern
@@ -19,7 +19,7 @@ Request: $ARGUMENTS
 
 4. **Execute.**
    - **parallel**: launch all subagents in ONE message. Give each a self-contained prompt with the files it owns and what to return. When they finish, check for overlapping edits, then summarize.
-   - **sub-tickets**: draft each one (title, 2–4 line description, acceptance criteria as a checklist, rough order). Show the drafts and STOP. Create them in Linear under the parent issue only after I confirm.
+   - **sub-tickets**: draft each one (title, 2–4 line description, acceptance criteria as a checklist, rough order). Show the drafts and STOP. Create them in Linear under the parent issue only after I confirm, in the bound workspace and team.
    - everything else: do it.
 
 5. **Hand over** as `~/.claude/CLAUDE.md` says: what changed, what was verified, what wasn't, and the commit message.

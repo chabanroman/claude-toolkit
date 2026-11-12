@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # git commit-msg hook: strip Claude attribution so commits are authored by me only.
-# Removes "Co-Authored-By: Claude…", "Claude-Session:…" and "Generated with Claude Code" lines,
+# Removes "Co-Authored-By: Claude…", "Claude-Session:…", "Generated with Claude Code" and 🤖 lines,
 # then trailing blank lines. Installed per repo by `claude-hook-enable`.
 
 msg_file="$1"
 tmp="$(mktemp)"
 
-grep -viE '^(co-authored-by:.*(claude|anthropic)|claude-session:|.*generated with \[?claude code)' "$msg_file" > "$tmp"
+grep -viE '^(co-authored-by:.*(claude|anthropic)|claude-session:|.*generated with \[?claude code|[[:space:]]*🤖)' "$msg_file" > "$tmp" || true
 
 # Drop trailing blank lines left behind by the removed trailers.
 awk '{ lines[NR] = $0 } END { n = NR; while (n > 0 && lines[n] ~ /^[[:space:]]*$/) n = n - 1; for (i = 1; i <= n; i = i + 1) print lines[i] }' "$tmp" > "$msg_file"

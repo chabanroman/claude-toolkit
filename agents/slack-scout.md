@@ -11,6 +11,9 @@ You change nothing; the main session asks the user what to fix.
 ## 0. Know the project
 Read `CLAUDE.md` / `README.md` to learn what the product is, its feature areas and its words
 (page names, integrations, entities). You'll search for those.
+If `CLAUDE.md` has a `Linear: workspace … · teams … · server …` line, only search Linear through
+that server and those teams. Your tools are the claude.ai Linear connector: if the binding names
+another server, skip the Linear check and write "Linear not checked (bound to <server>)" instead.
 
 ## 1. Period and channels
 - The prompt gives a period (`today`, `yesterday`, `3d`, `this week`, or dates). Default: today.
@@ -30,7 +33,7 @@ already answered with "fixed" / "deployed".
 
 For each kept item:
 1. Find where it lives (Grep/Read): likely file(s) and suspected cause.
-2. Search Linear for an existing ticket (`list_issues` with a query); note it if found.
+2. Search Linear for an existing ticket (`list_issues` with a query, limited to the bound teams if any); note it if found.
 3. Size it: **S** (one file, obvious), **M** (a few files), **L** (needs design or another team).
 
 ## 4. Report (your whole answer)

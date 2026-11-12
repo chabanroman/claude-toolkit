@@ -16,4 +16,18 @@ Every server costs context, so only the ones used in most sessions are global. T
 
 Why `gh` over the GitHub MCP: the CLI costs no context until it's used, has no token to store in config, and Claude already knows it.
 
+## A second Linear workspace
+
+The claude.ai Linear connector is bound to one workspace. For a project that lives in another one:
+
+1. In the project: `claude mcp add --scope project --transport http <name> https://mcp.linear.app/mcp` (e.g. `linear-acme`). This writes the project's `.mcp.json` (no token in it; auth is OAuth).
+2. `/mcp` → `<name>` → Authenticate, and sign into **that** workspace.
+3. Block the default connector there, in the project's `.claude/settings.json`:
+   ```json
+   { "permissions": { "deny": ["mcp__claude_ai_Linear__*"] } }
+   ```
+4. Declare it in the project's `CLAUDE.md`: `Linear: workspace <name> · teams <KEY,…> · server <name>`.
+
+Claude then uses only that server in the project and checks the workspace and team before any write (`~/.claude/CLAUDE.md` → Linear binding). Note: `slack-scout` only has the claude.ai connector's tools, so in such a project it skips the Linear lookup and says so.
+
 Rules: official servers only, never forks. Tokens go in env vars or OAuth, never in a committed `.mcp.json`. Prefer read-only scopes.
