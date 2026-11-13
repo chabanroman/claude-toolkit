@@ -3,6 +3,9 @@
 ## Planned
 - Cross-project `orbita-connect` skill (how a product reports `/health`, metrics and deploys to the owner's dashboard), once that SDK exists.
 
+## 0.6.0 — 2026-11-13
+- Gaps noticed outside the task (errors & logs, Sentry, security, tests, performance, UX, ops) go into the project's improvements backlog (`Improvements: <path>` in the project's `CLAUDE.md`, default `docs/improvements.md`) instead of being fixed in passing or forgotten; the hand-over lists what was added.
+
 ## 0.5.0 — 2026-11-12
 - Git policy per project (`Git policy: hand-over | ask | autonomous` in the project's `CLAUDE.md`, default `ask`); `/pickup`, `/sentry-sweep`, `/slack-scan` follow it. Always: no direct commits to main / master / dev / develop, no force-push, branch named after the work.
 - No AI mention in commits, PRs, branch names, code comments, changelogs or Linear comments; `commit-msg` hook also strips 🤖 lines.

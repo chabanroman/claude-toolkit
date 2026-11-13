@@ -59,6 +59,14 @@ When I ask to change how Claude works (a rule, command, agent, skill, hook), fir
 
 Never mix the two: a toolkit commit contains toolkit files only. If a request needs both, do both parts and say which went where.
 
+## Gaps you notice along the way
+
+While working, you will see things that should be better later but are outside the task: missing error tracking (Sentry), logs that say too little or too much, a security or privacy gap, missing tests or monitoring, slow paths, accessibility, a manual step that should be automated. Don't fix them in the current change, and don't drop them either:
+
+- Write each one down in the project's improvements backlog: the file named by a line `Improvements: <path>` in the project's `CLAUDE.md`, else `docs/improvements.md` (create it if missing). One entry: what and where (file / area), why it matters, a rough priority (now / before production / later), and the area (errors & logs, security, tests, performance, UX, ops).
+- Don't duplicate: update an entry that already covers it; tick or remove entries a change fixes.
+- When an entry grows into real work, propose a ticket (or a roadmap phase) for it instead of keeping it in the list.
+
 ## Hand-over
 
-End every piece of work with: what changed (file, one line each) · what was verified and how · what was NOT verified · the commit message.
+End every piece of work with: what changed (file, one line each) · what was verified and how · what was NOT verified · gaps added to the improvements backlog (if any) · the commit message.

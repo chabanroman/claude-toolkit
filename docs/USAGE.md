@@ -18,6 +18,7 @@
 | Line | Options | Default |
 |---|---|---|
 | `Git policy: <name>` | `hand-over` (never commits locally, gives the message) · `ask` (asks before commit / push) · `autonomous` (commits after the local gate, pushes the work branch, opens the PR with `gh`) | `ask` |
+| `Improvements: <path>` | Where Claude writes gaps it notices outside the task (errors & logs, security, tests, performance, UX, ops), each with why and a rough priority; listed in every hand-over | `docs/improvements.md` |
 | `Linear: workspace <name> · teams <KEY,…> · server <mcp-server>` | Claude uses only that server, checks workspace + team before writing, ignores tickets from other teams. Second workspace setup: [MCP.md](../MCP.md) | the claude.ai Linear connector |
 
 Always, whatever the policy: no direct commits to `main` / `master` / `dev` / `develop`, no force-push, branch named after the work, and no AI mention in commits, PRs, branches, comments, changelogs or Linear. In a cloud session `hand-over` and `ask` still commit and push the work branch without asking (the VM is thrown away). Posting to Linear is always asked, whatever the policy.
