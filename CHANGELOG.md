@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+- `logo.svg` at the root: the toolkit's logo, shown in the owner's dashboard.
+
 ## Planned
 - Cross-project `orbita-connect` skill (how a product reports `/health`, metrics and deploys to the owner's dashboard), once that SDK exists.
 

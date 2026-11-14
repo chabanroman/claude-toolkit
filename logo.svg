@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="toolkit-box" x1="8" y1="22" x2="56" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#b79bff"/>
+      <stop offset="1" stop-color="#5b3fd6"/>
+    </linearGradient>
+  </defs>
+  <path d="M23 22 V17 a5 5 0 0 1 5 -5 h8 a5 5 0 0 1 5 5 v5" stroke="#cdbbff" stroke-width="4" stroke-linecap="round"/>
+  <rect x="7" y="22" width="50" height="34" rx="7" fill="url(#toolkit-box)"/>
+  <rect x="7" y="30" width="50" height="3" fill="#2a1a78" fill-opacity="0.45"/>
+  <rect x="27" y="27" width="10" height="8" rx="2" fill="#e9e1ff"/>
+  <path d="M19 40 L25.5 44.5 L19 49" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M30 49 H43" stroke="#7ce8f7" stroke-width="3.5" stroke-linecap="round"/>
+</svg>
