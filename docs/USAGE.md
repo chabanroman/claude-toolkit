@@ -28,6 +28,8 @@ Always, whatever the policy: no direct commits to `main` / `master` / `dev` / `d
 
 Claude picks them by itself (routing rules); you can also name one: "ask neckbeard how auth works".
 
+**Models.** The main session is Opus (today Opus 5.5; `install.sh` sets `"model": "opus"`). Opus designs and decides what to delegate: Sonnet for bounded work, Haiku for bulk lookups, an Opus subagent for parts that need judgment, Fable only for very hard reasoning and only after you agree. It checks every result before using it and says in the hand-over what went to which model (`CLAUDE.md`, "Models: Opus leads").
+
 | Agent | Use it for | Edits code? |
 |---|---|---|
 | `neckbeard` | "How does X work?" answered from the source with `file:line` citations | no |

@@ -20,6 +20,19 @@ Installed by `claude-toolkit` as `~/.claude/CLAUDE.md`. A project's own CLAUDE.m
 
 Prefer a project command when one exists for the job (`/ticket`, `/commit-msg`, …) over re-deriving its steps.
 
+## Models: Opus leads
+
+The main session runs on **Opus** (`"model": "opus"` in `~/.claude/settings.json`, today Opus 5.5). Opus is the lead: it owns the design, the plan, the decisions and the final result.
+
+- **Opus designs.** Architecture, data model, the plan, UI concepts, tricky logic and the final review stay with Opus. They are never handed to a cheaper model.
+- **Opus decides who does each part.** Before delegating, ask: is it faster *and* just as good done by another model? If the brief would be nearly as long as the work, or the part needs judgment, do it yourself.
+  - Sonnet: bounded, well-specified work: searches, page checks, rules review, reading Slack or logs, mechanical edits following a clear pattern.
+  - Haiku: bulk, simple, read-only lookups.
+  - Opus subagent: a separate part that still needs judgment (a scene, a sidequest bug).
+  - Fable: only very hard, long reasoning where Opus is measurably not enough, and only after I agree (about twice the price of Opus).
+- **Delegate with care, no mistakes.** A brief is the only context the other model gets: goal, acceptance criteria, files to read, rules that apply (stack, tokens, i18n, tests), what is out of scope and what was already ruled out. No hypotheses dressed as facts.
+- **Opus owns the result.** Read what came back and check it against the code and the criteria before using it: run the gate, look at the diff, spot-check claims. Fix or redo anything wrong; never pass a subagent's report on unchecked. In the hand-over, say what was delegated and to which model.
+
 ## Git
 
 A project declares its policy in its own `CLAUDE.md` with a line `Git policy: <name>`. Nothing declared → `ask`.

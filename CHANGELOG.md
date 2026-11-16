@@ -6,6 +6,9 @@
 ## Planned
 - Cross-project `orbita-connect` skill (how a product reports `/health`, metrics and deploys to the owner's dashboard), once that SDK exists.
 
+## 0.7.0 — 2026-11-16
+- Opus leads: the main session runs on Opus (`install.sh` sets `"model": "opus"`, today Opus 5.5). Opus owns design, plan and final review, decides per part whether to do it itself or delegate (Sonnet bounded work, Haiku bulk lookups, Opus subagent for judgment, Fable only with the owner's yes), writes complete briefs and checks every delegated result before using it; the hand-over names what went to which model.
+
 ## 0.6.0 — 2026-11-13
 - Gaps noticed outside the task (errors & logs, Sentry, security, tests, performance, UX, ops) go into the project's improvements backlog (`Improvements: <path>` in the project's `CLAUDE.md`, default `docs/improvements.md`) instead of being fixed in passing or forgotten; the hand-over lists what was added.
 

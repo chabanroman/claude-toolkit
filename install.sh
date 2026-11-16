@@ -56,6 +56,15 @@ if [ "$(jq -c '.attribution // null' "$settings")" != '{"commit":"","pr":"","ses
   echo "set attribution off in $settings"
 fi
 
+# The main session runs on Opus: it leads and decides what to delegate (CLAUDE.md, "Models: Opus leads").
+if [ "$(jq -r '.model // ""' "$settings")" != "opus" ]; then
+  mkdir -p "$backup"
+  cp "$settings" "$backup/settings.json"
+  tmp="$(mktemp)"
+  jq '.model = "opus"' "$settings" > "$tmp" && mv "$tmp" "$settings"
+  echo "set model to opus in $settings"
+fi
+
 if [ "$cloud" = "--cloud" ]; then
   echo "cloud install done"
   exit 0
