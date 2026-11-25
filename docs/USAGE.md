@@ -48,7 +48,7 @@ Claude picks them by itself (routing rules); you can also name one: "ask neckbea
 | `crc` | Claude with Remote Control (drive it from the phone). |
 | `crcb` | Same, session named `<folder>:<branch>`. |
 | `wt CDP-123 [slug]` | New worktree `../<repo>-wt/cdp-123[-slug]` + branch + deps + Claude running `/pickup CDP-123`. Run it in several terminals for parallel tickets. `WT_BASE=origin/dev wt …` branches off dev. |
-| `wt-clean` | Shows merged, clean worktrees; `wt-clean --yes` removes them. |
+| `wt-clean` | Shows finished work: every worktree (`../<repo>-wt/`, `.claude/worktrees/`, …) and local branch that is merged (or whose PR is merged, via `gh`, for squash merges) and has no uncommitted changes. `wt-clean --yes` removes them and their branch on origin. Unmerged or dirty ones are kept. Claude runs it at the start of `/pickup` and after a merge. |
 | `claude-hook-enable` | In a repo: strip Claude attribution from every commit. |
 | `toolkit-sync "msg"` | Commit + push all toolkit changes. |
 

@@ -1,33 +1,85 @@
 #!/usr/bin/env bash
-# wt-clean — remove worktrees under ../<repo>-wt/ whose branch is merged into the default branch
-# and that have no uncommitted changes. Prints what it would do; pass --yes to actually remove.
+# wt-clean — free the disk from finished work: remove worktrees and local branches that are done.
+# A branch is done when it is merged into the default branch, or its remote branch is gone and
+# `gh` confirms its PR was merged (squash / rebase merges). Covers every worktree of the repo
+# (../<repo>-wt/*, .claude/worktrees/*, anywhere else), not only the ones `wt` made.
+# Never touches: the main checkout, the current branch, main/master/dev/develop, unmerged
+# branches, worktrees with uncommitted changes, locked worktrees.
+# Prints what it would do; pass --yes to actually remove (also deletes the merged branch on
+# origin if it is still there). Works with macOS bash 3.2.
 set -euo pipefail
 
 yes="${1:-}"
-repo="$(git rev-parse --show-toplevel)"
-root="$(dirname "$repo")/$(basename "$repo")-wt"
+main_wt="$(git worktree list --porcelain | awk '/^worktree /{ print substr($0, 10); exit }')"
+cd "$main_wt"
 base="${WT_BASE:-$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null || echo main)}"
+current="$(git rev-parse --abbrev-ref HEAD)"
+has_gh=0
+if command -v gh >/dev/null 2>&1 && gh auth status >/dev/null 2>&1; then has_gh=1; fi
 
-git fetch --quiet origin 2>/dev/null || true
+git fetch --quiet --prune origin 2>/dev/null || true
+git worktree prune
+
 merged="$(git branch --format='%(refname:short)' --merged "$base")"
+gone="$(git branch --format='%(refname:short) %(upstream:track)' | awk '$2=="[gone]"{ print $1 }')"
 
-git worktree list --porcelain | awk '/^worktree /{ print substr($0, 10) }' | while read -r dir; do
-  case "$dir" in "$root"/*) ;; *) continue ;; esac
-  branch="$(git -C "$dir" rev-parse --abbrev-ref HEAD)"
-  if ! printf '%s\n' "$merged" | grep -qx "$branch"; then
-    echo "keep   $dir ($branch not merged into $base)"
-    continue
+# Prints the reason when the branch is done; fails otherwise.
+is_done() {
+  local b="$1"
+  case "$b" in main|master|dev|develop|"$current"|"${base#origin/}") return 1 ;; esac
+  if printf '%s\n' "$merged" | grep -qx "$b"; then echo "merged into $base"; return 0; fi
+  if [ "$has_gh" = 1 ] && printf '%s\n' "$gone" | grep -qx "$b" \
+    && [ -n "$(gh pr list --head "$b" --state merged --json number --jq '.[].number' 2>/dev/null)" ]; then
+    echo "PR merged, remote branch gone"; return 0
   fi
-  if [ -n "$(git -C "$dir" status --porcelain)" ]; then
-    echo "keep   $dir (uncommitted changes)"
-    continue
+  return 1
+}
+
+remove_branch() {
+  local b="$1"
+  git branch -D "$b" >/dev/null
+  if git show-ref --verify --quiet "refs/remotes/origin/$b" \
+    && git push --quiet origin --delete "$b" 2>/dev/null; then
+    echo "        deleted origin/$b"
   fi
+}
+
+wt_branches=""
+# Worktrees: dir <TAB> branch <TAB> locked. The main checkout is skipped.
+while IFS="$(printf '\t')" read -r dir branch locked; do
+  [ "$dir" = "$main_wt" ] && continue
+  if [ -z "$branch" ]; then echo "keep   $dir (detached HEAD)"; continue; fi
+  wt_branches="$wt_branches$branch
+"
+  if [ "$locked" = 1 ]; then echo "keep   $dir (locked)"; continue; fi
+  if ! reason="$(is_done "$branch")"; then echo "keep   $dir ($branch not merged)"; continue; fi
+  if [ -n "$(git -C "$dir" status --porcelain 2>/dev/null)" ]; then echo "keep   $dir (uncommitted changes)"; continue; fi
+  size="$(du -sh "$dir" 2>/dev/null | cut -f1)"
   if [ "$yes" = "--yes" ]; then
     git worktree remove "$dir"
-    git branch -d "$branch"
-    echo "removed $dir ($branch)"
+    remove_branch "$branch"
+    echo "removed $dir ($branch, $reason, freed $size)"
   else
-    echo "remove $dir ($branch) — rerun with --yes"
+    echo "remove $dir ($branch, $reason, $size)"
+  fi
+done <<EOF
+$(git worktree list --porcelain | awk '
+  /^worktree /{ if (d != "") print d "\t" b "\t" l; d = substr($0, 10); b = ""; l = 0 }
+  /^branch /{ b = substr($0, 8); sub("^refs/heads/", "", b) }
+  /^locked/{ l = 1 }
+  END{ if (d != "") print d "\t" b "\t" l }')
+EOF
+
+# Local branches without a worktree.
+for b in $(git branch --format='%(refname:short)'); do
+  if printf '%s' "$wt_branches" | grep -qx "$b"; then continue; fi
+  reason="$(is_done "$b")" || continue
+  if [ "$yes" = "--yes" ]; then
+    remove_branch "$b"
+    echo "removed branch $b ($reason)"
+  else
+    echo "remove branch $b ($reason)"
   fi
 done
-git worktree prune
+
+if [ "$yes" != "--yes" ]; then echo "(dry run — rerun with --yes to remove)"; fi

@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Clean up finished work so worktrees and branches don't eat the disk: `wt-clean` now covers every worktree (not only `../<repo>-wt/`), local branches without a worktree, squash-merged branches (PR merged per `gh`, remote gone) and the merged branch on origin; works on macOS bash 3.2. Claude runs `wt-clean --yes` at the start of `/pickup` and after a PR is merged; unmerged or dirty work is never deleted without asking.
 - `logo.svg` at the root: the toolkit's logo, shown in the owner's dashboard.
 
 ## Planned

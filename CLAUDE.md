@@ -48,6 +48,7 @@ Whatever the policy:
 - Name the branch after the work: `<ticket-id>-<slug>` or `fix-<slug>` without a ticket — never a `claude/` prefix.
 - In a cloud session (`CLAUDE_CODE_REMOTE=true`) the VM is thrown away, so `hand-over` and `ask` commit and push to the work branch when the work is done, then give me the PR link or the branch name. If the push to that name is refused, push the session's own branch instead and tell me its name, so nothing is lost. `autonomous` is unchanged.
 - Message: imperative subject under ~70 chars, blank line, short body on the why, ticket id on its own last line when known.
+- Clean up finished work, so old worktrees and branches don't eat the disk: locally, at the start of `/pickup` and after a PR of mine is merged, run `wt-clean --yes`. It removes only worktrees and branches that are merged (or whose PR `gh` shows as merged) and have no uncommitted changes, plus their branch on origin. Never delete an unmerged branch or a worktree with changes without asking; list them in the hand-over instead. A worktree you made yourself for a side task: remove it when that task is done.
 
 ## No AI mention
 
